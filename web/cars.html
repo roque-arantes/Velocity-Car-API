@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VelocityCar | 🏎️ Garage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: rgba(20, 20, 25, 0.85);
+      --card-border: rgba(255, 60, 60, 0.3);
+      --text: #f0f0f0;
+      --muted: #888;
+      --neon: #ff3c3c;
+      --neon-glow: 0 0 20px rgba(255, 60, 60, 0.5), 0 0 40px rgba(255, 60, 60, 0.3);
+      --accent: #ff6b35;
+      --ok: #00ff88;
+      --danger: #ff2d2d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Fundo com carro esportivo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.9) 100%),
+        url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80') center/cover no-repeat;
+      z-index: -2;
+    }
+    
+    /* Linhas de velocidade animadas */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 100px,
+        rgba(255, 60, 60, 0.03) 100px,
+        rgba(255, 60, 60, 0.03) 102px
+      );
+      z-index: -1;
+      animation: speedLines 20s linear infinite;
+    }
+    
+    @keyframes speedLines {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-200px); }
+    }
+    
+    /* Header com logo estilizado */
+    .header {
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+      background: rgba(10,10,10,0.8);
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #ff3c3c, #ff6b35, #ffaa00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: var(--neon-glow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .logo::before {
+      content: '🏎️';
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px rgba(255,60,60,0.5));
+    }
+    
+    .back-link {
+      color: var(--neon);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: 1px solid var(--neon);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .back-link:hover {
+      background: var(--neon);
+      color: #000;
+      box-shadow: var(--neon-glow);
+    }
+    
+    /* Container principal */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 24px;
+    }
+    
+    /* Título da seção */
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #fff, #ff6b35);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      border-left: 3px solid var(--neon);
+      padding-left: 15px;
+    }
+    
+    /* Config card */
+    .config-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .config-card label {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .config-card input {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px 15px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,60,60,0.2);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'Rajdhani', monospace;
+      font-size: 1rem;
+    }
+    
+    .config-card input:focus {
+      outline: none;
+      border-color: var(--neon);
+      box-shadow: 0 0 10px rgba(255,60,60,0.2);
+    }
+    
+    /* Grid de cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 20px;
+    }
+    
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--neon), var(--accent), transparent);
+    }
+    
+    .card:hover {
+      border-color: var(--neon);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(255,60,60,0.15);
+    }
+    
+    .card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--neon);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .card h3::before {
+      content: '▸';
+      color: var(--accent);
+    }
+    
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    label {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 4px;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--neon);
+      background: rgba(255,60,60,0.05);
+    }
+    
+    input::placeholder {
+      color: #555;
+    }
+    
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 14px;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .primary {
+      background: linear-gradient(90deg, var(--neon), var(--accent));
+      color: #000;
+    }
+    
+    .primary:hover {
+      box-shadow: var(--neon-glow);
+      transform: scale(1.02);
+    }
+    
+    .ok {
+      background: linear-gradient(90deg, #00cc6a, var(--ok));
+      color: #000;
+    }
+    
+    .ok:hover {
+      box-shadow: 0 0 20px rgba(0,255,136,0.4);
+    }
+    
+    .danger {
+      background: linear-gradient(90deg, #cc0000, var(--danger));
+      color: #fff;
+    }
+    
+    .danger:hover {
+      box-shadow: 0 0 20px rgba(255,45,45,0.5);
+    }
+    
+    /* Output/Console */
+    pre {
+      background: rgba(0,0,0,0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 25px;
+      max-height: 350px;
+      overflow: auto;
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9rem;
+      color: var(--ok);
+      position: relative;
+    }
+    
+    pre::before {
+      content: '> OUTPUT';
+      position: absolute;
+      top: 0; left: 0;
+      background: var(--neon);
+      color: #000;
+      padding: 4px 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 0 0 4px 0;
+    }
+    
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #111; }
+    ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 3px; }
+    
+    /* Speedometer decorativo */
+    .speedometer {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 80px;
+      height: 80px;
+      border: 3px solid var(--neon);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      color: var(--neon);
+      opacity: 0.5;
+      box-shadow: var(--neon-glow);
+    }
+    
+    .speedometer::before {
+      content: '🔥';
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">VELOCITY GARAGE</div>
+    <a class="back-link" href="./index.html">← Painel</a>
+  </header>
+
+  <div class="wrap">
+    <h1 class="section-title">Gerenciamento de Veículos</h1>
+    <p class="section-subtitle">Sistema CRUD completo para o controle da frota VelocityCar</p>
+
+    <div class="config-card">
+      <label for="base">⚙️ Base URL da API</label>
+      <input id="base" placeholder="http://localhost:8080" />
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Cadastrar Veículo</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">POST /car</p>
+        <div class="row">
+          <div><label>Marca<input id="brand" placeholder="Ferrari" /></label></div>
+          <div><label>Modelo<input id="model" placeholder="488 GTB" /></label></div>
+          <div><label>Cor<input id="color" placeholder="Rosso Corsa" /></label></div>
+          <div><label>Chassi<input id="chassiNumber" placeholder="9BWZZZ377VT" /></label></div>
+          <div><label>Ano Fabricação<input id="yearManufacture" type="number" placeholder="2024" /></label></div>
+          <div><label>Ano Modelo<input id="yearModel" type="number" placeholder="2025" /></label></div>
+        </div>
+        <label>Preço (R$)<input id="price" type="number" step="0.01" placeholder="850000.00" /></label>
+        <button class="primary" id="create">🚀 Cadastrar Veículo</button>
+      </div>
+
+      <div class="card">
+        <h3>Consultar Frota</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">GET /car</p>
+        <button class="ok" id="list">📋 Listar Todos os Veículos</button>
+        
+        <h3 style="margin-top: 25px;">Buscar por ID</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">GET /car/{id}</p>
+        <input id="getId" type="number" placeholder="Digite o ID do veículo" />
+        <button class="ok" id="find">🔍 Localizar Veículo</button>
+      </div>
+
+      <div class="card">
+        <h3>Atualizar Veículo</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">PUT /car/{id}</p>
+        <input id="updateId" type="number" placeholder="ID do veículo para atualizar" />
+        <div class="row">
+          <div><label>Marca<input id="uBrand" /></label></div>
+          <div><label>Modelo<input id="uModel" /></label></div>
+          <div><label>Cor<input id="uColor" /></label></div>
+          <div><label>Ano Fab.<input id="uYearManufacture" type="number" /></label></div>
+          <div><label>Ano Mod.<input id="uYearModel" type="number" /></label></div>
+          <div><label>Preço<input id="uPrice" type="number" step="0.01" /></label></div>
+        </div>
+        <button class="primary" id="update">🔧 Atualizar Dados</button>
+      </div>
+
+      <div class="card">
+        <h3>Remover Veículo</h3>
+        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">DELETE /car/{id}</p>
+        <input id="deleteId" type="number" placeholder="ID do veículo para remover" />
+        <button class="danger" id="remove">🗑️ Excluir Permanentemente</button>
+      </div>
+    </div>
+
+    <pre id="output">🏁 Sistema pronto. Aguardando comandos...</pre>
+  </div>
+  
+  <div class="speedometer"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const out = (obj) => $("output").textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+    const baseKey = "velocitycar_api_base";
+    $("base").value = localStorage.getItem(baseKey) || "http://localhost:8080";
+    $("base").addEventListener("change", () => localStorage.setItem(baseKey, $("base").value.trim()));
+    const api = () => $("base").value.trim();
+
+    async function req(path, options = {}) {
+      const response = await fetch(`${api()}${path}`, {
+        headers: { "Content-Type": "application/json" },
+        ...options
+      });
+      const raw = await response.text();
+      let body;
+      try { body = raw ? JSON.parse(raw) : null; } catch { body = raw; }
+      if (!response.ok) throw new Error(JSON.stringify({ status: response.status, body }, null, 2));
+      return body;
+    }
+
+    $("create").onclick = async () => {
+      try {
+        const payload = {
+          brand: $("brand").value,
+          model: $("model").value,
+          color: $("color").value,
+          chassiNumber: $("chassiNumber").value,
+          yearManufacture: Number($("yearManufacture").value),
+          yearModel: Number($("yearModel").value),
+          price: Number($("price").value)
+        };
+        out(await req("/car", { method: "POST", body: JSON.stringify(payload) }));
+      } catch (e) { out(`Erro: ${e.message}`); }
+    };
+
+    $("list").onclick = async () => {
+      try { out(await req("/car")); } catch (e) { out(`Erro: ${e.message}`); }
+    };
+
+    $("find").onclick = async () => {
+      try { out(await req(`/car/${$("getId").value}`)); } catch (e) { out(`Erro: ${e.message}`); }
+    };
+
+    $("update").onclick = async () => {
+      try {
+        const payload = {
+          brand: $("uBrand").value,
+          model: $("uModel").value,
+          color: $("uColor").value,
+          yearManufacture: Number($("uYearManufacture").value),
+          yearModel: Number($("uYearModel").value),
+          price: Number($("uPrice").value)
+        };
+        out(await req(`/car/${$("updateId").value}`, { method: "PUT", body: JSON.stringify(payload) }));
+      } catch (e) { out(`Erro: ${e.message}`); }
+    };
+
+    $("remove").onclick = async () => {
+      try {
+        await req(`/car/${$("deleteId").value}`, { method: "DELETE" });
+        out("Carro deletado com sucesso.");
+      } catch (e) { out(`Erro: ${e.message}`); }
+    };
+  </script>
+</body>
+</html>

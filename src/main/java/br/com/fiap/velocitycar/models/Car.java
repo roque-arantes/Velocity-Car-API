@@ -23,4 +23,5 @@ public class Car {
     private int yearManufacture;
     private int yearModel;
     private Double price;
+    private String plate;
 }

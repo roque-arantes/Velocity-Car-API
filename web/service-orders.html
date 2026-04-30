@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VelocityCar | Service Orders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070d0c;
+      --panel: rgba(16, 28, 24, 0.9);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #f1fff8;
+      --muted: #9cb9ae;
+      --primary: #62f59d;
+      --secondary: #00d4ff;
+      --ok: #9dff6d;
+      --danger: #ff6b7a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Rajdhani", sans-serif;
+      background:
+        radial-gradient(circle at 15% 16%, rgba(98,245,157,0.15), transparent 30%),
+        radial-gradient(circle at 85% 86%, rgba(0,212,255,0.14), transparent 34%),
+        var(--bg);
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 26px 18px 36px; }
+    .header {
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--line);
+    }
+    h1 { font-family: "Orbitron", sans-serif; color: var(--primary); font-size: 1.65rem; }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav a {
+      text-decoration: none; color: var(--text); border: 1px solid var(--line);
+      border-radius: 999px; padding: 8px 12px; font-weight: 700; background: rgba(255,255,255,0.03);
+    }
+    .nav a:hover { border-color: var(--secondary); }
+    .panel {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 14px;
+    }
+    .panel h2 { font-family: "Orbitron", sans-serif; font-size: 0.95rem; margin-bottom: 10px; color: var(--secondary); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    label { display: block; margin-top: 8px; font-size: 0.86rem; color: var(--muted); }
+    input, textarea, button {
+      width: 100%; margin-top: 4px; border-radius: 9px; border: 1px solid var(--line);
+      background: rgba(0,0,0,0.24); color: var(--text); padding: 10px 12px; font-family: inherit; font-size: 1rem;
+    }
+    textarea { min-height: 108px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .86rem; }
+    input:focus, textarea:focus { outline: none; border-color: var(--primary); }
+    button { cursor: pointer; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; transition: .2s ease; }
+    button:hover { transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #061a14; }
+    .btn-ok { background: linear-gradient(90deg, #85de3e, var(--ok)); color: #152606; }
+    .btn-danger { background: linear-gradient(90deg, #ff8fa0, var(--danger)); color: #2a0d13; }
+    pre {
+      margin-top: 10px; background: rgba(0, 0, 0, 0.32); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px; max-height: 340px; overflow: auto; color: #9dffca; font-size: .86rem;
+    }
+    @media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <h1>🛠️ SERVICE ORDERS</h1>
+      <nav class="nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./cars.html">Carros</a>
+        <a href="./clients.html">Clientes</a>
+      </nav>
+    </header>
+
+    <section class="panel">
+      <h2>API Base URL</h2>
+      <input id="base" placeholder="http://localhost:8080" />
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Nova ordem (POST /serviceOrder)</h2>
+        <label>Descrição<input id="description" placeholder="Troca de freio e alinhamento" /></label>
+        <div class="cols">
+          <label>Client ID<input id="clientId" type="number" placeholder="1" /></label>
+          <label>Car ID<input id="carId" type="number" placeholder="1" /></label>
+        </div>
+        <label>Peças (JSON Array)
+          <textarea id="carParts">[
+  { "name": "Pastilha de freio", "quantity": 4, "price": 120.5 }
+]</textarea>
+        </label>
+        <button class="btn-primary" id="create">Cadastrar</button>
+      </article>
+
+      <article class="panel">
+        <h2>Consulta (GET /serviceOrder e /serviceOrder/{id})</h2>
+        <div class="cols">
+          <label>Página<input id="listPage" type="number" value="0" /></label>
+          <label>Tamanho<input id="listSize" type="number" value="10" /></label>
+        </div>
+        <button class="btn-ok" id="list">Listar ordens</button>
+        <label>ID<input id="getId" type="number" placeholder="ID da ordem" /></label>
+        <button class="btn-ok" id="find">Buscar por ID</button>
+      </article>
+
+      <article class="panel">
+        <h2>Filtro de valor (GET /serviceOrder/filter/total-price)</h2>
+        <div class="cols">
+          <label>Min<input id="min" type="number" step="0.01" placeholder="0" /></label>
+          <label>Max<input id="max" type="number" step="0.01" placeholder="2000" /></label>
+          <label>Página<input id="filterPage" type="number" value="0" /></label>
+          <label>Tamanho<input id="filterSize" type="number" value="10" /></label>
+        </div>
+        <button class="btn-ok" id="filter">Filtrar</button>
+      </article>
+
+      <article class="panel">
+        <h2>Atualizar / Remover</h2>
+        <label>ID para atualizar<input id="updateId" type="number" /></label>
+        <label>Descrição<input id="udescription" placeholder="Descrição atualizada" /></label>
+        <div class="cols">
+          <label>Client ID<input id="uclientId" type="number" /></label>
+          <label>Car ID<input id="ucarId" type="number" /></label>
+        </div>
+        <label>Peças (JSON Array)<textarea id="ucarParts">[]</textarea></label>
+        <button class="btn-primary" id="update">Atualizar</button>
+        <label>ID para remover<input id="deleteId" type="number" /></label>
+        <button class="btn-danger" id="remove">Remover</button>
+      </article>
+    </section>
+
+    <pre id="output">Aguardando comando...</pre>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const out = (value) => { $("output").textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2); };
+    const baseKey = "velocitycar_api_base";
+    $("base").value = localStorage.getItem(baseKey) || "http://localhost:8080";
+    $("base").addEventListener("change", () => localStorage.setItem(baseKey, $("base").value.trim()));
+    const api = () => $("base").value.trim();
+
+    async function req(path, options = {}) {
+      const response = await fetch(`${api()}${path}`, {
+        headers: { "Content-Type": "application/json" },
+        ...options
+      });
+      const raw = await response.text();
+      let body;
+      try { body = raw ? JSON.parse(raw) : null; } catch { body = raw; }
+      if (!response.ok) throw new Error(JSON.stringify({ status: response.status, body }, null, 2));
+      return body;
+    }
+
+    const numberValue = (value, label) => {
+      const parsed = Number(value);
+      if (Number.isNaN(parsed)) throw new Error(`Campo ${label} inválido.`);
+      return parsed;
+    };
+
+    const parseParts = (id) => {
+      const raw = $(id).value.trim();
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) throw new Error("carParts deve ser um array JSON.");
+      return parsed;
+    };
+
+    const getPayload = (prefix = "") => ({
+      description: $(`${prefix}description`).value,
+      clientId: numberValue($(`${prefix}clientId`).value, "clientId"),
+      carId: numberValue($(`${prefix}carId`).value, "carId"),
+      carParts: parseParts(`${prefix}carParts`)
+    });
+
+    $("create").onclick = async () => {
+      try { out(await req("/serviceOrder", { method: "POST", body: JSON.stringify(getPayload()) })); }
+      catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("list").onclick = async () => {
+      try {
+        const page = numberValue($("listPage").value, "page");
+        const size = numberValue($("listSize").value, "size");
+        out(await req(`/serviceOrder?page=${page}&size=${size}`));
+      } catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("find").onclick = async () => {
+      try { out(await req(`/serviceOrder/${$("getId").value}`)); } catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("filter").onclick = async () => {
+      try {
+        const min = numberValue($("min").value, "min");
+        const max = numberValue($("max").value, "max");
+        const page = numberValue($("filterPage").value, "page");
+        const size = numberValue($("filterSize").value, "size");
+        out(await req(`/serviceOrder/filter/total-price?min=${min}&max=${max}&page=${page}&size=${size}`));
+      } catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("update").onclick = async () => {
+      try { out(await req(`/serviceOrder/${$("updateId").value}`, { method: "PUT", body: JSON.stringify(getPayload("u")) })); }
+      catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("remove").onclick = async () => {
+      try {
+        await req(`/serviceOrder/${$("deleteId").value}`, { method: "DELETE" });
+        out("Ordem de serviço removida com sucesso.");
+      } catch (error) { out(`Erro: ${error.message}`); }
+    };
+  </script>
+</body>
+</html>

@@ -3,427 +3,181 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VelocityCar | 🚀 Painel Principal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>VelocityCar | Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #060608;
-      --card: rgba(15, 15, 22, 0.9);
-      --text: #f0f0f5;
-      --muted: #7a7a8a;
-      --red: #ff3c3c;
-      --cyan: #00d4ff;
-      --purple: #a855f7;
-      --border: rgba(255,255,255,0.08);
+      --bg: #080a12;
+      --panel: rgba(16, 20, 34, 0.9);
+      --line: rgba(255, 255, 255, 0.1);
+      --text: #f4f8ff;
+      --muted: #98a0b3;
+      --cars: #ff6a3d;
+      --clients: #00d0ff;
+      --orders: #62f59d;
+      --accent: #a375ff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
     body {
-      font-family: 'Rajdhani', sans-serif;
-      color: var(--text);
       min-height: 100vh;
-      background: var(--bg);
-      overflow-x: hidden;
+      font-family: "Rajdhani", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,106,61,0.15), transparent 35%),
+        radial-gradient(circle at 80% 90%, rgba(0,208,255,0.12), transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(163,117,255,0.08), transparent 40%),
+        var(--bg);
     }
-    
-    /* Fundo animado */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: 
-        radial-gradient(circle at 30% 20%, rgba(255, 60, 60, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 70% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 60%);
-      z-index: -2;
-    }
-    
-    /* Grid de fundo */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 60px 60px;
-      z-index: -1;
-    }
-    
-    /* Header */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 40px; }
     .header {
-      padding: 25px 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      background: rgba(6,6,8,0.8);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-bottom: 28px; padding-bottom: 14px; border-bottom: 1px solid var(--line);
     }
-    
-    .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 900;
-      letter-spacing: 3px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
+    .brand {
+      font-family: "Orbitron", sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: 1px;
+      background: linear-gradient(90deg, #ff6a3d, #00d0ff, #a375ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    
-    .logo-text {
-      background: linear-gradient(90deg, #ff3c3c, #ff6b35, #ffaa00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .subtitle { color: var(--muted); font-size: 1rem; }
+    .config {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+      padding: 18px; margin-bottom: 24px;
     }
-    
-    .logo-icon {
-      font-size: 2.5rem;
-      animation: carMove 3s ease-in-out infinite;
+    .config h2 {
+      font-family: "Orbitron", sans-serif; font-size: 1rem; margin-bottom: 10px; color: var(--accent);
     }
-    
-    @keyframes carMove {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(5px); }
+    .row { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; }
+    input, button {
+      border-radius: 10px; border: 1px solid var(--line); padding: 12px 14px;
+      font-family: inherit; font-size: 1rem;
     }
-    
-    /* Container */
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 50px 24px;
+    input { background: rgba(0, 0, 0, 0.28); color: var(--text); }
+    input:focus { outline: none; border-color: var(--clients); }
+    button {
+      cursor: pointer; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      transition: 0.25s ease;
     }
-    
-    /* Hero section */
-    .hero {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-    
-    .hero h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      background: linear-gradient(90deg, #fff, #aaa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .hero p {
-      color: var(--muted);
-      font-size: 1.2rem;
-      font-weight: 400;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    /* Config card */
-    .config-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 40px;
-      backdrop-filter: blur(10px);
-    }
-    
-    .config-card label {
-      color: var(--muted);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      display: block;
-      margin-bottom: 10px;
-    }
-    
-    .config-row {
-      display: flex;
-      gap: 12px;
-    }
-    
-    .config-card input {
-      flex: 1;
-      padding: 14px 18px;
-      background: rgba(0,0,0,0.4);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: 'Rajdhani', monospace;
-      font-size: 1rem;
-    }
-    
-    .config-card input:focus {
-      outline: none;
-      border-color: var(--cyan);
-    }
-    
-    .config-card button {
-      padding: 14px 24px;
-      border: none;
-      border-radius: 8px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .btn-save {
-      background: rgba(0,212,255,0.2);
-      color: var(--cyan);
-      border: 1px solid var(--cyan);
-    }
-    
-    .btn-save:hover {
-      background: var(--cyan);
-      color: #000;
-    }
-    
-    .btn-test {
-      background: rgba(168,85,247,0.2);
-      color: var(--purple);
-      border: 1px solid var(--purple);
-    }
-    
-    .btn-test:hover {
-      background: var(--purple);
-      color: #000;
-    }
-    
+    .btn-primary { background: linear-gradient(90deg, #00d0ff, #a375ff); color: #04060a; }
+    .btn-secondary { background: linear-gradient(90deg, #ff6a3d, #ffcc55); color: #0a0604; }
+    button:hover { filter: brightness(1.08); transform: translateY(-1px); }
     pre {
-      margin-top: 15px;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid var(--border);
-      padding: 15px;
-      border-radius: 8px;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.85rem;
-      color: #00ff88;
-      max-height: 150px;
-      overflow: auto;
+      margin-top: 12px; background: rgba(0, 0, 0, 0.34); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px; max-height: 170px; overflow: auto;
+      color: #91ffc0; font-size: 0.88rem;
     }
-    
-    /* Cards de navegação */
-    .nav-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 25px;
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px;
     }
-    
-    .nav-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 35px;
-      backdrop-filter: blur(10px);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      text-decoration: none;
-      color: var(--text);
-      display: block;
+    .card {
+      display: block; text-decoration: none; color: inherit;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+      padding: 20px; transition: 0.3s ease; position: relative; overflow: hidden;
+      min-height: 180px;
     }
-    
-    .nav-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 4px;
+    .card::before {
+      content: ""; position: absolute; top: 0; left: 0; height: 4px; width: 100%;
+      background: linear-gradient(90deg, transparent, #fff, transparent);
+      opacity: 0.2;
     }
-    
-    .nav-card.cars::before {
-      background: linear-gradient(90deg, #ff3c3c, #ff6b35, #ffaa00);
+    .card:hover { transform: translateY(-4px); }
+    .card h3 { font-family: "Orbitron", sans-serif; font-size: 1.2rem; margin-bottom: 6px; }
+    .card p { color: var(--muted); line-height: 1.35; }
+    .badge {
+      margin-top: 14px; display: inline-block; padding: 8px 12px;
+      border-radius: 999px; font-weight: 700; font-size: 0.85rem;
     }
-    
-    .nav-card.clients::before {
-      background: linear-gradient(90deg, #00d4ff, #a855f7);
+    .cars h3 { color: var(--cars); }
+    .cars .badge { background: rgba(255,106,61,0.18); color: #ffba9f; }
+    .cars:hover { border-color: rgba(255,106,61,0.6); box-shadow: 0 16px 30px rgba(255,106,61,0.16); }
+    .clients h3 { color: var(--clients); }
+    .clients .badge { background: rgba(0,208,255,0.2); color: #a6f3ff; }
+    .clients:hover { border-color: rgba(0,208,255,0.65); box-shadow: 0 16px 30px rgba(0,208,255,0.15); }
+    .orders h3 { color: var(--orders); }
+    .orders .badge { background: rgba(98,245,157,0.2); color: #c4ffd9; }
+    .orders:hover { border-color: rgba(98,245,157,0.65); box-shadow: 0 16px 30px rgba(98,245,157,0.12); }
+    @media (max-width: 780px) {
+      .row { grid-template-columns: 1fr; }
     }
-    
-    .nav-card:hover {
-      transform: translateY(-5px) scale(1.01);
-    }
-    
-    .nav-card.cars:hover {
-      border-color: rgba(255,60,60,0.5);
-      box-shadow: 0 20px 60px rgba(255,60,60,0.15);
-    }
-    
-    .nav-card.clients:hover {
-      border-color: rgba(0,212,255,0.5);
-      box-shadow: 0 20px 60px rgba(0,212,255,0.15);
-    }
-    
-    .nav-card .icon {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
-      display: block;
-    }
-    
-    .nav-card.cars .icon {
-      filter: drop-shadow(0 0 15px rgba(255,60,60,0.5));
-    }
-    
-    .nav-card.clients .icon {
-      filter: drop-shadow(0 0 15px rgba(0,212,255,0.5));
-    }
-    
-    .nav-card h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    
-    .nav-card.cars h3 {
-      background: linear-gradient(90deg, #ff3c3c, #ff6b35);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .nav-card.clients h3 {
-      background: linear-gradient(90deg, #00d4ff, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .nav-card p {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-    
-    .nav-card .enter-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      border-radius: 25px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 0.3s ease;
-    }
-    
-    .nav-card.cars .enter-btn {
-      background: linear-gradient(90deg, #ff3c3c, #ff6b35);
-      color: #000;
-    }
-    
-    .nav-card.cars:hover .enter-btn {
-      box-shadow: 0 0 25px rgba(255,60,60,0.5);
-    }
-    
-    .nav-card.clients .enter-btn {
-      background: linear-gradient(90deg, #00d4ff, #a855f7);
-      color: #000;
-    }
-    
-    .nav-card.clients:hover .enter-btn {
-      box-shadow: 0 0 25px rgba(0,212,255,0.5);
-    }
-    
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-    
-    .footer span {
-      color: var(--red);
-    }
-    
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #111; }
-    ::-webkit-scrollbar-thumb { background: linear-gradient(var(--red), var(--cyan)); border-radius: 3px; }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <span class="logo-icon">🏎️</span>
-      <span class="logo-text">VELOCITY CAR</span>
-    </div>
-  </header>
+  <main class="wrap">
+    <header class="header">
+      <h1 class="brand">VELOCITYCAR DASH</h1>
+      <p class="subtitle">Controle completo da API em uma interface só.</p>
+    </header>
 
-  <div class="container">
-    <div class="hero">
-      <h1>Painel de Controle</h1>
-      <p>Interface web futurista para gerenciamento completo da API VelocityCar</p>
-    </div>
-
-    <div class="config-card">
-      <label>⚙️ Configuração da API</label>
-      <div class="config-row">
+    <section class="config">
+      <h2>API BASE URL</h2>
+      <div class="row">
         <input id="apiBase" placeholder="http://localhost:8080" />
-        <button class="btn-save" id="saveBase">💾 Salvar</button>
-        <button class="btn-test" id="checkApi">🔌 Testar</button>
+        <button class="btn-primary" id="saveBase">Salvar</button>
+        <button class="btn-secondary" id="checkApi">Testar conexão</button>
       </div>
-      <pre id="output">Aguardando configuração...</pre>
-    </div>
+      <pre id="output">Pronto para conectar.</pre>
+    </section>
 
-    <div class="nav-grid">
-      <a href="./cars.html" class="nav-card cars">
-        <span class="icon">🏎️</span>
-        <h3>VELOCITY GARAGE</h3>
-        <p>Gerencie a frota de veículos com visual automotivo de alta performance. CRUD completo para carros.</p>
-        <span class="enter-btn">Acessar Garage →</span>
+    <section class="grid">
+      <a href="./cars.html" class="card cars">
+        <h3>🚗 Garage</h3>
+        <p>CRUD de veículos e filtros por preço, ano e cor.</p>
+        <span class="badge">Abrir módulo</span>
       </a>
-      
-      <a href="./clients.html" class="nav-card clients">
-        <span class="icon">👤</span>
-        <h3>CLIENT HUB</h3>
-        <p>Central de relacionamento com clientes. Cadastro, consulta e gestão de dados pessoais.</p>
-        <span class="enter-btn">Acessar Hub →</span>
+      <a href="./clients.html" class="card clients">
+        <h3>👤 Clients</h3>
+        <p>Cadastro de clientes com pesquisa, atualização e status ativo.</p>
+        <span class="badge">Abrir módulo</span>
       </a>
-    </div>
-  </div>
-  
-  <footer class="footer">
-    Desenvolvido com <span>♥</span> para o projeto VelocityCar • FIAP 2TDS
-  </footer>
+      <a href="./service-orders.html" class="card orders">
+        <h3>🛠️ Service Orders</h3>
+        <p>Ordens de serviço com peças, total e filtros por faixa de valor.</p>
+        <span class="badge">Nova página</span>
+      </a>
+    </section>
+  </main>
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const getBase = () => localStorage.getItem("velocitycar_api_base") || "http://localhost:8080";
-    const setOutput = (value) => { $("output").textContent = value; };
+    const baseKey = "velocitycar_api_base";
+    const setOutput = (value) => { $("output").textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2); };
 
-    $("apiBase").value = getBase();
+    $("apiBase").value = localStorage.getItem(baseKey) || "http://localhost:8080";
 
     $("saveBase").addEventListener("click", () => {
-      localStorage.setItem("velocitycar_api_base", $("apiBase").value.trim());
-      setOutput("✓ Base URL salva com sucesso!");
+      localStorage.setItem(baseKey, $("apiBase").value.trim());
+      setOutput("Base URL salva com sucesso.");
     });
+
+    async function safeFetchJson(url) {
+      const response = await fetch(url);
+      const raw = await response.text();
+      let body;
+      try { body = raw ? JSON.parse(raw) : null; } catch { body = raw; }
+      if (!response.ok) throw new Error(JSON.stringify({ status: response.status, body }, null, 2));
+      return body;
+    }
 
     $("checkApi").addEventListener("click", async () => {
       const base = $("apiBase").value.trim();
-      if (!base) return setOutput("⚠ Informe a base URL da API.");
-      setOutput("⏳ Testando conexão...");
+      if (!base) {
+        setOutput("Informe a base URL da API.");
+        return;
+      }
+      setOutput("Testando conexão...");
       try {
-        const [cars, clients] = await Promise.all([
-          fetch(`${base}/car`).then(r => r.json()),
-          fetch(`${base}/client`).then(r => r.json())
+        const [cars, clients, orders] = await Promise.all([
+          safeFetchJson(`${base}/car`),
+          safeFetchJson(`${base}/client`),
+          safeFetchJson(`${base}/serviceOrder`)
         ]);
-        setOutput(JSON.stringify({
-          status: "✓ Conectado",
-          veiculos: Array.isArray(cars) ? cars.length : "?",
-          clientes: Array.isArray(clients) ? clients.length : "?"
-        }, null, 2));
-      } catch (e) {
-        setOutput(`✗ Erro: ${e.message}`);
+        setOutput({
+          status: "conectado",
+          cars: cars?.totalElements ?? (Array.isArray(cars) ? cars.length : "ok"),
+          clients: clients?.totalElements ?? (Array.isArray(clients) ? clients.length : "ok"),
+          serviceOrders: orders?.totalElements ?? (Array.isArray(orders) ? orders.length : "ok")
+        });
+      } catch (error) {
+        setOutput(`Erro: ${error.message}`);
       }
     });
   </script>

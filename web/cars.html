@@ -3,437 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VelocityCar | 🏎️ Garage</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>VelocityCar | Garage</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --card: rgba(20, 20, 25, 0.85);
-      --card-border: rgba(255, 60, 60, 0.3);
-      --text: #f0f0f0;
-      --muted: #888;
-      --neon: #ff3c3c;
-      --neon-glow: 0 0 20px rgba(255, 60, 60, 0.5), 0 0 40px rgba(255, 60, 60, 0.3);
-      --accent: #ff6b35;
-      --ok: #00ff88;
-      --danger: #ff2d2d;
+      --bg: #090a0f;
+      --panel: rgba(18, 20, 30, 0.9);
+      --line: rgba(255, 255, 255, 0.09);
+      --text: #f4f8ff;
+      --muted: #97a0b3;
+      --primary: #ff6a3d;
+      --secondary: #ffbf59;
+      --ok: #6affbc;
+      --danger: #ff5167;
+      --aux: #00d4ff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
     body {
-      font-family: 'Rajdhani', sans-serif;
-      color: var(--text);
       min-height: 100vh;
-      background: var(--bg);
-      position: relative;
-      overflow-x: hidden;
+      color: var(--text);
+      font-family: "Rajdhani", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,106,61,0.16), transparent 30%),
+        radial-gradient(circle at 80% 85%, rgba(0,212,255,0.12), transparent 30%),
+        var(--bg);
     }
-    
-    /* Fundo com carro esportivo */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: 
-        linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.9) 100%),
-        url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&q=80') center/cover no-repeat;
-      z-index: -2;
-    }
-    
-    /* Linhas de velocidade animadas */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 100px,
-        rgba(255, 60, 60, 0.03) 100px,
-        rgba(255, 60, 60, 0.03) 102px
-      );
-      z-index: -1;
-      animation: speedLines 20s linear infinite;
-    }
-    
-    @keyframes speedLines {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-200px); }
-    }
-    
-    /* Header com logo estilizado */
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 26px 18px 36px; }
     .header {
-      padding: 20px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
-      background: rgba(10,10,10,0.8);
+      display: flex; justify-content: space-between; align-items: center; gap: 10px;
+      margin-bottom: 22px; padding-bottom: 12px; border-bottom: 1px solid var(--line);
     }
-    
-    .logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.8rem;
-      font-weight: 900;
-      background: linear-gradient(90deg, #ff3c3c, #ff6b35, #ffaa00);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: var(--neon-glow);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    h1 { font-family: "Orbitron", sans-serif; color: var(--primary); font-size: 1.8rem; }
+    .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+    .nav a {
+      text-decoration: none; color: var(--text); border: 1px solid var(--line);
+      border-radius: 999px; padding: 8px 12px; font-weight: 700;
+      background: rgba(255,255,255,0.03);
     }
-    
-    .logo::before {
-      content: '🏎️';
-      font-size: 2rem;
-      filter: drop-shadow(0 0 10px rgba(255,60,60,0.5));
+    .nav a:hover { border-color: var(--aux); }
+    .panel {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px;
+      margin-bottom: 14px;
     }
-    
-    .back-link {
-      color: var(--neon);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 10px 20px;
-      border: 1px solid var(--neon);
-      border-radius: 4px;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .back-link:hover {
-      background: var(--neon);
-      color: #000;
-      box-shadow: var(--neon-glow);
-    }
-    
-    /* Container principal */
-    .wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 30px 24px;
-    }
-    
-    /* Título da seção */
-    .section-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      background: linear-gradient(90deg, #fff, #ff6b35);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .section-subtitle {
-      color: var(--muted);
-      font-size: 1.1rem;
-      margin-bottom: 25px;
-      border-left: 3px solid var(--neon);
-      padding-left: 15px;
-    }
-    
-    /* Config card */
-    .config-card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-      backdrop-filter: blur(10px);
-    }
-    
-    .config-card label {
-      color: var(--muted);
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .config-card input {
-      width: 100%;
-      margin-top: 8px;
-      padding: 12px 15px;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,60,60,0.2);
-      border-radius: 4px;
-      color: var(--text);
-      font-family: 'Rajdhani', monospace;
+    .panel h2 { font-family: "Orbitron", sans-serif; font-size: 0.98rem; margin-bottom: 10px; color: var(--secondary); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 14px; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    label { display: block; margin-top: 8px; font-size: 0.86rem; color: var(--muted); }
+    input, button {
+      width: 100%; margin-top: 4px; border-radius: 9px; border: 1px solid var(--line);
+      background: rgba(0,0,0,0.25); color: var(--text); padding: 10px 12px; font-family: inherit;
       font-size: 1rem;
     }
-    
-    .config-card input:focus {
-      outline: none;
-      border-color: var(--neon);
-      box-shadow: 0 0 10px rgba(255,60,60,0.2);
-    }
-    
-    /* Grid de cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 20px;
-    }
-    
-    .card {
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 24px;
-      backdrop-filter: blur(10px);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(90deg, var(--neon), var(--accent), transparent);
-    }
-    
-    .card:hover {
-      border-color: var(--neon);
-      transform: translateY(-2px);
-      box-shadow: 0 10px 40px rgba(255,60,60,0.15);
-    }
-    
-    .card h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--neon);
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .card h3::before {
-      content: '▸';
-      color: var(--accent);
-    }
-    
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    
-    label {
-      display: block;
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    input {
-      width: 100%;
-      margin-top: 6px;
-      padding: 12px 14px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 4px;
-      color: var(--text);
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-    }
-    
-    input:focus {
-      outline: none;
-      border-color: var(--neon);
-      background: rgba(255,60,60,0.05);
-    }
-    
-    input::placeholder {
-      color: #555;
-    }
-    
+    input:focus { outline: none; border-color: var(--aux); }
     button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 14px;
-      border: none;
-      border-radius: 4px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      cursor: pointer; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; transition: .2s ease;
     }
-    
-    .primary {
-      background: linear-gradient(90deg, var(--neon), var(--accent));
-      color: #000;
-    }
-    
-    .primary:hover {
-      box-shadow: var(--neon-glow);
-      transform: scale(1.02);
-    }
-    
-    .ok {
-      background: linear-gradient(90deg, #00cc6a, var(--ok));
-      color: #000;
-    }
-    
-    .ok:hover {
-      box-shadow: 0 0 20px rgba(0,255,136,0.4);
-    }
-    
-    .danger {
-      background: linear-gradient(90deg, #cc0000, var(--danger));
-      color: #fff;
-    }
-    
-    .danger:hover {
-      box-shadow: 0 0 20px rgba(255,45,45,0.5);
-    }
-    
-    /* Output/Console */
+    button:hover { transform: translateY(-1px); }
+    .btn-primary { background: linear-gradient(90deg, var(--primary), var(--secondary)); color: #1a0e09; }
+    .btn-ok { background: linear-gradient(90deg, #35d890, var(--ok)); color: #052514; }
+    .btn-danger { background: linear-gradient(90deg, #ff7a8d, var(--danger)); color: #2a0d13; }
     pre {
-      background: rgba(0,0,0,0.8);
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 25px;
-      max-height: 350px;
-      overflow: auto;
-      font-family: 'Fira Code', 'Consolas', monospace;
-      font-size: 0.9rem;
-      color: var(--ok);
-      position: relative;
+      margin-top: 10px; background: rgba(0, 0, 0, 0.32); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px; max-height: 320px; overflow: auto; color: #96ffc5;
+      font-size: .86rem;
     }
-    
-    pre::before {
-      content: '> OUTPUT';
-      position: absolute;
-      top: 0; left: 0;
-      background: var(--neon);
-      color: #000;
-      padding: 4px 12px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 700;
-      border-radius: 0 0 4px 0;
-    }
-    
-    /* Scrollbar personalizada */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #111; }
-    ::-webkit-scrollbar-thumb { background: var(--neon); border-radius: 3px; }
-    
-    /* Speedometer decorativo */
-    .speedometer {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 80px;
-      height: 80px;
-      border: 3px solid var(--neon);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
-      color: var(--neon);
-      opacity: 0.5;
-      box-shadow: var(--neon-glow);
-    }
-    
-    .speedometer::before {
-      content: '🔥';
-      font-size: 1.5rem;
-    }
+    @media (max-width: 700px) { .cols { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">VELOCITY GARAGE</div>
-    <a class="back-link" href="./index.html">← Painel</a>
-  </header>
+  <main class="wrap">
+    <header class="header">
+      <h1>🚗 VELOCITY GARAGE</h1>
+      <nav class="nav">
+        <a href="./index.html">Dashboard</a>
+        <a href="./clients.html">Clientes</a>
+        <a href="./service-orders.html">Ordens</a>
+      </nav>
+    </header>
 
-  <div class="wrap">
-    <h1 class="section-title">Gerenciamento de Veículos</h1>
-    <p class="section-subtitle">Sistema CRUD completo para o controle da frota VelocityCar</p>
-
-    <div class="config-card">
-      <label for="base">⚙️ Base URL da API</label>
+    <section class="panel">
+      <h2>API Base URL</h2>
       <input id="base" placeholder="http://localhost:8080" />
-    </div>
+    </section>
 
-    <div class="grid">
-      <div class="card">
-        <h3>Cadastrar Veículo</h3>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">POST /car</p>
-        <div class="row">
-          <div><label>Marca<input id="brand" placeholder="Ferrari" /></label></div>
-          <div><label>Modelo<input id="model" placeholder="488 GTB" /></label></div>
-          <div><label>Cor<input id="color" placeholder="Rosso Corsa" /></label></div>
-          <div><label>Chassi<input id="chassiNumber" placeholder="9BWZZZ377VT" /></label></div>
-          <div><label>Ano Fabricação<input id="yearManufacture" type="number" placeholder="2024" /></label></div>
-          <div><label>Ano Modelo<input id="yearModel" type="number" placeholder="2025" /></label></div>
+    <section class="grid">
+      <article class="panel">
+        <h2>Novo veículo (POST /car)</h2>
+        <div class="cols">
+          <label>Marca<input id="brand" placeholder="Ferrari" /></label>
+          <label>Modelo<input id="model" placeholder="296 GTB" /></label>
+          <label>Cor<input id="color" placeholder="Rosso Corsa" /></label>
+          <label>Chassi<input id="chassiNumber" placeholder="9BWZZZ377VT" /></label>
+          <label>Ano fabricação<input id="yearManufacture" type="number" placeholder="2024" /></label>
+          <label>Ano modelo<input id="yearModel" type="number" placeholder="2025" /></label>
         </div>
-        <label>Preço (R$)<input id="price" type="number" step="0.01" placeholder="850000.00" /></label>
-        <button class="primary" id="create">🚀 Cadastrar Veículo</button>
-      </div>
+        <label>Preço<input id="price" type="number" step="0.01" placeholder="850000.00" /></label>
+        <button class="btn-primary" id="create">Cadastrar</button>
+      </article>
 
-      <div class="card">
-        <h3>Consultar Frota</h3>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">GET /car</p>
-        <button class="ok" id="list">📋 Listar Todos os Veículos</button>
-        
-        <h3 style="margin-top: 25px;">Buscar por ID</h3>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">GET /car/{id}</p>
-        <input id="getId" type="number" placeholder="Digite o ID do veículo" />
-        <button class="ok" id="find">🔍 Localizar Veículo</button>
-      </div>
+      <article class="panel">
+        <h2>Consultar (GET /car e /car/{id})</h2>
+        <button class="btn-ok" id="list">Listar todos</button>
+        <label>ID<input id="getId" type="number" placeholder="ID do carro" /></label>
+        <button class="btn-ok" id="find">Buscar por ID</button>
+      </article>
 
-      <div class="card">
-        <h3>Atualizar Veículo</h3>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">PUT /car/{id}</p>
-        <input id="updateId" type="number" placeholder="ID do veículo para atualizar" />
-        <div class="row">
-          <div><label>Marca<input id="uBrand" /></label></div>
-          <div><label>Modelo<input id="uModel" /></label></div>
-          <div><label>Cor<input id="uColor" /></label></div>
-          <div><label>Ano Fab.<input id="uYearManufacture" type="number" /></label></div>
-          <div><label>Ano Mod.<input id="uYearModel" type="number" /></label></div>
-          <div><label>Preço<input id="uPrice" type="number" step="0.01" /></label></div>
+      <article class="panel">
+        <h2>Filtros</h2>
+        <label>Faixa de preço</label>
+        <div class="cols">
+          <input id="priceMin" type="number" step="0.01" placeholder="mínimo" />
+          <input id="priceMax" type="number" step="0.01" placeholder="máximo" />
         </div>
-        <button class="primary" id="update">🔧 Atualizar Dados</button>
-      </div>
+        <button class="btn-ok" id="filterPrice">Filtrar por preço</button>
 
-      <div class="card">
-        <h3>Remover Veículo</h3>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 10px;">DELETE /car/{id}</p>
-        <input id="deleteId" type="number" placeholder="ID do veículo para remover" />
-        <button class="danger" id="remove">🗑️ Excluir Permanentemente</button>
-      </div>
-    </div>
+        <label>Ano de fabricação</label>
+        <input id="year" type="number" placeholder="2024" />
+        <button class="btn-ok" id="filterYear">Filtrar por ano</button>
 
-    <pre id="output">🏁 Sistema pronto. Aguardando comandos...</pre>
-  </div>
-  
-  <div class="speedometer"></div>
+        <label>Cor</label>
+        <input id="colorFilter" placeholder="preto" />
+        <button class="btn-ok" id="filterColor">Filtrar por cor</button>
+      </article>
+
+      <article class="panel">
+        <h2>Atualizar / Remover</h2>
+        <label>ID para atualizar<input id="updateId" type="number" /></label>
+        <div class="cols">
+          <label>Marca<input id="uBrand" /></label>
+          <label>Modelo<input id="uModel" /></label>
+          <label>Cor<input id="uColor" /></label>
+          <label>Ano fabricação<input id="uYearManufacture" type="number" /></label>
+          <label>Ano modelo<input id="uYearModel" type="number" /></label>
+          <label>Preço<input id="uPrice" type="number" step="0.01" /></label>
+        </div>
+        <button class="btn-primary" id="update">Atualizar</button>
+        <label>ID para remover<input id="deleteId" type="number" /></label>
+        <button class="btn-danger" id="remove">Remover</button>
+      </article>
+    </section>
+
+    <pre id="output">Aguardando comando...</pre>
+  </main>
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const out = (obj) => $("output").textContent = typeof obj === "string" ? obj : JSON.stringify(obj, null, 2);
+    const out = (value) => { $("output").textContent = typeof value === "string" ? value : JSON.stringify(value, null, 2); };
     const baseKey = "velocitycar_api_base";
     $("base").value = localStorage.getItem(baseKey) || "http://localhost:8080";
     $("base").addEventListener("change", () => localStorage.setItem(baseKey, $("base").value.trim()));
@@ -451,6 +166,13 @@
       return body;
     }
 
+    const numberOrNull = (value) => {
+      if (value === "" || value == null) return null;
+      const num = Number(value);
+      if (Number.isNaN(num)) throw new Error("Valor numérico inválido.");
+      return num;
+    };
+
     $("create").onclick = async () => {
       try {
         const payload = {
@@ -458,20 +180,36 @@
           model: $("model").value,
           color: $("color").value,
           chassiNumber: $("chassiNumber").value,
-          yearManufacture: Number($("yearManufacture").value),
-          yearModel: Number($("yearModel").value),
-          price: Number($("price").value)
+          yearManufacture: numberOrNull($("yearManufacture").value),
+          yearModel: numberOrNull($("yearModel").value),
+          price: numberOrNull($("price").value)
         };
         out(await req("/car", { method: "POST", body: JSON.stringify(payload) }));
-      } catch (e) { out(`Erro: ${e.message}`); }
+      } catch (error) { out(`Erro: ${error.message}`); }
     };
 
     $("list").onclick = async () => {
-      try { out(await req("/car")); } catch (e) { out(`Erro: ${e.message}`); }
+      try { out(await req("/car")); } catch (error) { out(`Erro: ${error.message}`); }
     };
 
     $("find").onclick = async () => {
-      try { out(await req(`/car/${$("getId").value}`)); } catch (e) { out(`Erro: ${e.message}`); }
+      try { out(await req(`/car/${$("getId").value}`)); } catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("filterPrice").onclick = async () => {
+      try {
+        const min = numberOrNull($("priceMin").value);
+        const max = numberOrNull($("priceMax").value);
+        out(await req(`/car/filter/price?min=${min}&max=${max}`));
+      } catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("filterYear").onclick = async () => {
+      try { out(await req(`/car/filter/year?year=${numberOrNull($("year").value)}`)); } catch (error) { out(`Erro: ${error.message}`); }
+    };
+
+    $("filterColor").onclick = async () => {
+      try { out(await req(`/car/filter/color?color=${encodeURIComponent($("colorFilter").value.trim())}`)); } catch (error) { out(`Erro: ${error.message}`); }
     };
 
     $("update").onclick = async () => {
@@ -480,19 +218,19 @@
           brand: $("uBrand").value,
           model: $("uModel").value,
           color: $("uColor").value,
-          yearManufacture: Number($("uYearManufacture").value),
-          yearModel: Number($("uYearModel").value),
-          price: Number($("uPrice").value)
+          yearManufacture: numberOrNull($("uYearManufacture").value),
+          yearModel: numberOrNull($("uYearModel").value),
+          price: numberOrNull($("uPrice").value)
         };
         out(await req(`/car/${$("updateId").value}`, { method: "PUT", body: JSON.stringify(payload) }));
-      } catch (e) { out(`Erro: ${e.message}`); }
+      } catch (error) { out(`Erro: ${error.message}`); }
     };
 
     $("remove").onclick = async () => {
       try {
         await req(`/car/${$("deleteId").value}`, { method: "DELETE" });
-        out("Carro deletado com sucesso.");
-      } catch (e) { out(`Erro: ${e.message}`); }
+        out("Carro removido com sucesso.");
+      } catch (error) { out(`Erro: ${error.message}`); }
     };
   </script>
 </body>

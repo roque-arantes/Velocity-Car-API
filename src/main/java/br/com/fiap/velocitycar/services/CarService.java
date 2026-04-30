@@ -4,11 +4,13 @@ import br.com.fiap.velocitycar.models.Car;
 import br.com.fiap.velocitycar.repositories.CarRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
 public class CarService {
@@ -23,8 +25,23 @@ public class CarService {
         return repository.save(car);
     }
 
-    public List<Car> getAllCars() {
-        return repository.findAll();
+    public Page<Car> getAllCars(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public Page<Car> filterCarsByPrice(Double min, Double max, Pageable pageable) {
+        return repository.findByPriceBetween(min, max, pageable);
+    }
+
+    public Page<Car> filterCarsByColor(String color, Pageable pageable) {
+        return repository.findByColorIgnoreCase(color, pageable);
+    }
+
+    public Page<Car> filterCarsByYear(String direction, int page, int size) {
+        Sort sort = "desc".equalsIgnoreCase(direction)
+                ? Sort.by("yearManufacture").descending()
+                : Sort.by("yearManufacture").ascending();
+        return repository.findAll(PageRequest.of(page, size, sort));
     }
 
     public Car getCarById(Long id) {

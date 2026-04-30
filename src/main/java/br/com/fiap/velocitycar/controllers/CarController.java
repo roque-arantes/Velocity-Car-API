@@ -4,11 +4,11 @@ import br.com.fiap.velocitycar.models.Car;
 import br.com.fiap.velocitycar.services.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/car")
@@ -19,8 +19,31 @@ public class CarController {
     private CarService service;
 
     @GetMapping
-    public List<Car> getCars() {
-        return service.getAllCars();
+    public Page<Car> getCars(@RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size) {
+        return service.getAllCars(PageRequest.of(page, size));
+    }
+
+    @GetMapping("/filter/price")
+    public Page<Car> filterCarsByPrice(@RequestParam Double min,
+                                       @RequestParam Double max,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        return service.filterCarsByPrice(min, max, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/filter/year")
+    public Page<Car> filterCarsByYear(@RequestParam(defaultValue = "asc") String direction,
+                                      @RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        return service.filterCarsByYear(direction, page, size);
+    }
+
+    @GetMapping("/filter/color")
+    public Page<Car> filterCarsByColor(@RequestParam String color,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size) {
+        return service.filterCarsByColor(color, PageRequest.of(page, size));
     }
 
     @PostMapping

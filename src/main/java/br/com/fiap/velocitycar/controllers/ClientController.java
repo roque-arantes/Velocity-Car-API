@@ -4,11 +4,11 @@ import br.com.fiap.velocitycar.models.Client;
 import br.com.fiap.velocitycar.services.ClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/client")
@@ -19,7 +19,17 @@ public class ClientController {
     private ClientService service;
 
     @GetMapping
-    public List<Client> listAll() { return service.getAllClient() ;}
+    public Page<Client> listAll(@RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "10") int size) {
+        return service.getAllClient(PageRequest.of(page, size));
+    }
+
+    @GetMapping("/filter/active")
+    public Page<Client> filterClientByIsActive(@RequestParam Boolean active,
+                                               @RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "10") int size) {
+        return service.filterClientByIsActive(active, PageRequest.of(page, size));
+    }
 
     @PostMapping
     public ResponseEntity<Client> createMovie(@RequestBody Client client){

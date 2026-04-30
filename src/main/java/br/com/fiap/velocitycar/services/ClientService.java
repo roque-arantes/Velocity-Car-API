@@ -3,13 +3,11 @@ package br.com.fiap.velocitycar.services;
 import br.com.fiap.velocitycar.models.Client;
 import br.com.fiap.velocitycar.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-
-
 
 @Service
 public class ClientService {
@@ -17,8 +15,12 @@ public class ClientService {
     @Autowired
     private ClientRepository repository;
 
-    public List<Client> getAllClient() {
-        return repository.findAll();
+    public Page<Client> getAllClient(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    public Page<Client> filterClientByIsActive(Boolean isActive, Pageable pageable) {
+        return repository.findByIsActive(isActive, pageable);
     }
 
     public Client addClient(Client client) {
